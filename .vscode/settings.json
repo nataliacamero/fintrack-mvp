@@ -1,0 +1,30 @@
+{
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.general.tags": ["TODO", "FIXME", "HACK", "NOTE"],
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "foreground": "#fff",
+      "background": "#f59e0b",
+      "iconColour": "#f59e0b"
+    },
+    "FIXME": {
+      "icon": "alert",
+      "foreground": "#fff",
+      "background": "#ef4444",
+      "iconColour": "#ef4444"
+    },
+    "HACK": {
+      "icon": "tools",
+      "foreground": "#fff",
+      "background": "#8b5cf6",
+      "iconColour": "#8b5cf6"
+    },
+    "NOTE": {
+      "icon": "note",
+      "foreground": "#fff",
+      "background": "#3b82f6",
+      "iconColour": "#3b82f6"
+    }
+  }
+}
