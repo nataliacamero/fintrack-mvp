@@ -1,3 +1,5 @@
+import { MAX_AMOUNT, MIN_AMOUNT } from "./constants";
+
 /**
  * Fase 1 (Entorno): Crear el archivo, entender el problema y escribir pseudocódigo (en
  * español).
@@ -67,6 +69,15 @@ const isExpense = (value: string) => {
   return value.startsWith("-");
 };
 
+const amountLimitsValidation = (inputValue: number) => {
+  if (inputValue < MIN_AMOUNT || inputValue > MAX_AMOUNT) {
+    return {
+      error: true,
+      msg: `Amount ${inputValue} is out of limits: minimun: ${MIN_AMOUNT}, maximun: ${MAX_AMOUNT}`,
+    }
+  }
+}
+
 function validateAmount(inputValue: string): TransactionAmountInterface {
   console.log(
     "---------------------- Code start from here...: ---------------------",
@@ -113,6 +124,8 @@ function validateAmount(inputValue: string): TransactionAmountInterface {
     };
   }
 
+
+
   //Check if the input is not zero
   if (typeof inputAsNumber === "number" && !inputAsNumber) {
     console.log(
@@ -130,29 +143,44 @@ function validateAmount(inputValue: string): TransactionAmountInterface {
       inputAsNumber,
       typeof inputAsNumber,
     );
+
+    const limitsError = amountLimitsValidation(inputAsNumber);
+    if (limitsError) {
+      return {
+        isInvalidTransaction: true,
+        msg: limitsError.msg,
+      }
+    }
+
     return {
-      amount: Number(decimalsTreatment(nonEmptySpaces).amount), // TODO: to fix, it doesn't take the decimal part, pending how to we resolve this.
+      amount: Number(decimalsTreatment(nonEmptySpaces).amount),
       amountType: isExpense(nonEmptySpaces) ? "expense" : "income",
-      isInvalidTransaction: false,
-      msg: "",
+      isInvalidTransaction: error,
+      msg: msg,
     };
   }
 }
 
+console.log("Validate Amount: ", validateAmount("999999")); // Max limit test valid
+console.log("Validate Amount: ", validateAmount("1000000")); // Max limit test valid
+console.log("Validate Amount: ", validateAmount("1000001")); // out of max limit test invalid
+console.log("Validate Amount: ", validateAmount("-999999")); // Min limit test valid
+console.log("Validate Amount: ", validateAmount("-1000000")); // Min limit test valid
+console.log("Validate Amount: ", validateAmount("-1000001")); // out of min limit test invalid
 console.log("Validate Amount: ", validateAmount("12345.12312312313"));
 console.log("Validate Amount: ", validateAmount("1234512312312313"));
 console.log("Validate Amount: ", validateAmount(".98764234")); // We have to validate that there is an integuer value, it can't be zero.43434344?
-// console.log("Validate Amount: ", validateAmount("10.0"));// Problem here, when is converted to number, gives the integer, not de decimal part.
-// console.log("Validate Amount: ", validateAmount("989879.0997636"));
+console.log("Validate Amount: ", validateAmount("10.0"));// Problem here, when is converted to number, gives the integer, not de decimal part.
+console.log("Validate Amount: ", validateAmount("989879.0997636"));
 console.log("Validate Amount: ", validateAmount("10.00")); // bad return 10.
 console.log("Validate Amount: ", validateAmount("-10.00")); // bad return -10.
-// console.log("Validate Amount: ", validateAmount("-.20")); // bad return -.2.
+console.log("Validate Amount: ", validateAmount("-.20")); // bad return -.2.
 console.log("Validate Amount: ", validateAmount("-")); // NaN bad
 console.log("Validate Amount: ", validateAmount("asfasASA")); // NaN bad
 console.log("Validate Amount: ", validateAmount(""));
 console.log("Validate Amount: ", validateAmount(" "));
 console.log("Validate Amount: ", validateAmount("0"));
 console.log("Validate Amount: ", validateAmount("-0"));
-console.log("Validate Amount, no argument: ", validateAmount("/*,.&%$·")); // bad return
-// console.log("Validate Amount: ", validateAmount("12"));
-// console.log("Validate Amount: ", validateAmount("-12"));
+console.log("Validate Amount, no argument: ", validateAmount("/*,.&%$·"));
+console.log("Validate Amount: ", validateAmount("12"));
+console.log("Validate Amount: ", validateAmount("-12"));
