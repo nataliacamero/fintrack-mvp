@@ -29,7 +29,6 @@ import { MAX_AMOUNT, MIN_AMOUNT } from "./constants";
  * - Positive decimal
  * - Negative decimal
  * - Minus sign integer
- * - Minus sign decimal
  */
 
 /**
@@ -49,5 +48,38 @@ describe("Happy paths TC-HU001: Amount validations.", () => {
         expect(result.isInvalidTransaction).toBe(false);
         expect(result.amountType).toBe("income");
         expect(result.msg).toBe("");
+    });
+});
+
+describe("BVA TC-001: Limit boundaries.", () => {
+    test("Should reject one unit above the maximum limit", () => {
+        const invalidMaximum = (MAX_AMOUNT + 1).toString();
+        const message = `Amount ${invalidMaximum} is out of limits: minimum: ${MIN_AMOUNT}, maximum: ${MAX_AMOUNT}`
+        const result = validateAmount(invalidMaximum);
+        expect(result.isInvalidTransaction).toBe(true);
+        expect(result.msg).toBeDefined();
+        expect(result.msg).toContain(message)
+        expect(result.msg).toBe(message)
+    });
+    test("Should accept the exact maximum limit", () => {
+        const result = validateAmount(MAX_AMOUNT.toString());
+        expect(result.amount).toBe(MAX_AMOUNT);
+        expect(result.amountType).toBe("income");
+        expect(result.isInvalidTransaction).toBe(false);
+    });
+    test("Should accept the exact minimum limit", () => {
+        const result = validateAmount(MIN_AMOUNT.toString());
+        expect(result.amount).toBe(MIN_AMOUNT);
+        expect(result.amountType).toBe("expense");
+        expect(result.isInvalidTransaction).toBe(false);
+    });
+    test("Should reject one unit below the minimum limit", () => {
+        const invalidMinimum = (MIN_AMOUNT - 1).toString();
+        const expectedMessage = `Amount ${invalidMinimum} is out of limits: minimum: ${MIN_AMOUNT}, maximum: ${MAX_AMOUNT}`
+        const result = validateAmount(invalidMinimum);
+        expect(result.isInvalidTransaction).toBe(true);
+        expect(result.msg).toBeDefined();
+        expect(result.msg).toContain(expectedMessage);
+        expect(result.msg).toBe(expectedMessage);
     });
 });

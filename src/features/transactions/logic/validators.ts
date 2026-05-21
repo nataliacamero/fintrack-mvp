@@ -73,7 +73,7 @@ const amountLimitsValidation = (inputValue: number) => {
   if (inputValue < MIN_AMOUNT || inputValue > MAX_AMOUNT) {
     return {
       error: true,
-      msg: `Amount ${inputValue} is out of limits: minimun: ${MIN_AMOUNT}, maximun: ${MAX_AMOUNT}`,
+      msg: `Amount ${inputValue} is out of limits: minimum: ${MIN_AMOUNT}, maximum: ${MAX_AMOUNT}`,
     }
   }
 }
