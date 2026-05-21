@@ -78,7 +78,7 @@ const amountLimitsValidation = (inputValue: number) => {
   }
 }
 
-function validateAmount(inputValue: string): TransactionAmountInterface {
+export function validateAmount(inputValue: string): TransactionAmountInterface {
   console.log(
     "---------------------- Code start from here...: ---------------------",
     inputValue,
