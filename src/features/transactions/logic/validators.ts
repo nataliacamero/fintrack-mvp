@@ -74,9 +74,9 @@ const amountLimitsValidation = (inputValue: number) => {
     return {
       error: true,
       msg: `Amount ${inputValue} is out of limits: minimum: ${MIN_AMOUNT}, maximum: ${MAX_AMOUNT}`,
-    }
+    };
   }
-}
+};
 
 export function validateAmount(inputValue: string): TransactionAmountInterface {
   console.log(
@@ -86,6 +86,19 @@ export function validateAmount(inputValue: string): TransactionAmountInterface {
   // Sanitize the input
   const nonEmptySpaces = inputValue.trim();
   console.log("Trimed value: Step 1", nonEmptySpaces, typeof nonEmptySpaces);
+
+  //Check if the input is NaN
+  if (Number.isNaN(Number(nonEmptySpaces))) {
+    console.log(
+      "NaN number: Step 3",
+      Number(nonEmptySpaces),
+      typeof Number(nonEmptySpaces),
+    );
+    return {
+      isInvalidTransaction: true,
+      msg: `Invalid number: NaN ${Number(nonEmptySpaces)}`,
+    };
+  }
 
   // Check allowed decimals
   const { error, msg, amount } = decimalsTreatment(nonEmptySpaces);
@@ -111,21 +124,6 @@ export function validateAmount(inputValue: string): TransactionAmountInterface {
     };
   }
 
-  //Check if the input is NaN
-  if (Number.isNaN(Number(nonEmptySpaces))) {
-    console.log(
-      "NaN number: Step 3",
-      Number(nonEmptySpaces),
-      typeof Number(nonEmptySpaces),
-    );
-    return {
-      isInvalidTransaction: true,
-      msg: `Invalid number: NaN ${Number(nonEmptySpaces)}`,
-    };
-  }
-
-
-
   //Check if the input is not zero
   if (typeof inputAsNumber === "number" && !inputAsNumber) {
     console.log(
@@ -149,7 +147,7 @@ export function validateAmount(inputValue: string): TransactionAmountInterface {
       return {
         isInvalidTransaction: true,
         msg: limitsError.msg,
-      }
+      };
     }
 
     return {
@@ -170,7 +168,7 @@ console.log("Validate Amount: ", validateAmount("-1000001")); // out of min limi
 console.log("Validate Amount: ", validateAmount("12345.12312312313"));
 console.log("Validate Amount: ", validateAmount("1234512312312313"));
 console.log("Validate Amount: ", validateAmount(".98764234")); // We have to validate that there is an integuer value, it can't be zero.43434344?
-console.log("Validate Amount: ", validateAmount("10.0"));// Problem here, when is converted to number, gives the integer, not de decimal part.
+console.log("Validate Amount: ", validateAmount("10.0")); // Problem here, when is converted to number, gives the integer, not de decimal part.
 console.log("Validate Amount: ", validateAmount("989879.0997636"));
 console.log("Validate Amount: ", validateAmount("10.00")); // bad return 10.
 console.log("Validate Amount: ", validateAmount("-10.00")); // bad return -10.
