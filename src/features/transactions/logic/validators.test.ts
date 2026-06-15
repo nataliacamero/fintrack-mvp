@@ -198,6 +198,16 @@ describe("Sad paths TC-HU001: Amount validations.", () => {
     expect(result.isInvalidTransaction).toBe(true);
     expect(result.msg).toContain("Invalid number: NaN NaN");
   });
+  test("Should reject input with more than two decimals, and display an error message.", () => {
+    // 1. Arrange (Set up the data)
+    const input: string = "10.7898546";
+    // 2. Act (Execute the function)
+    const result = validateAmount(input);
+      
+    // 3. Assert (Check EVERYTHING that matters)
+    expect(result.isInvalidTransaction).toBeTruthy();
+    expect(result.msg).toBe("Has more than 2 decimals");
+  });
 });
 
 describe("BVA TC-001: Limit boundaries.", () => {
